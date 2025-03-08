@@ -1,100 +1,403 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- KS mashup from floater_adjust_environment, etc.  2025/01 -->
 
-<floater title="Advanced Lighting" name="advanced_lighting" help_topic="advanced_lighting_floater" layout="topleft" width="370" height="590" single_instance="true" can_resize="false">
+<floater layout="topleft" name="env_advanced_lighting" help_topic="floater_advanced_lighting" save_rect="true" title="Advanced Lighting" width="370" height="930" single_instance="true" can_resize="false">
    <string name="hdr_string">HDR Scale:</string>
    <string name="brightness_string">Brightness:</string>
    <string name="hdr_tooltip">Intensity of lighting effects such as realistically bright skies and dynamic exposure. 1.0 is the default, 0 is off, values between 0 and 1 are mixing Ambient with HDR.</string>
-   <layout_stack name="outer_stack" width="366" height="595" follows="all" animate="false" top="0" orientation="vertical">
-      <layout_panel name="env_controls" border="false" bevel_style="in" auto_resize="true" user_resize="true" height="580" visible="true">
-         <layout_stack name="settings_stack" width="360" height="580" follows="all" animate="false" orientation="horizontal">
-            <layout_panel border="false" name="lp_2" bevel_style="in" auto_resize="false" user_resize="false" visible="true" width="200" height="150">
 
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="12" left="8" name="reflection_probe_ambiance_label">Reflection Probe Ambiance:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="10"  increment="0.1"  can_edit_text="true" name="probe_ambiance" 
-                       tool_tip="Intensity of global illumination as seen by the active ambient probe. At zero, HDR is turned off and 'HDR scale' becomes 'Brightness'. Values between 0 and 1 mix Environment and HDR ambiences. Above 1 is entirely HDR."/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="scene_gamma_label">Brightness:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="20"  increment="0.1"  can_edit_text="true" name="scene_gamma"
-                       tool_tip=""/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="sunlight_scale_label">Sunlight scale:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="50"  increment="0.1"  can_edit_text="true" name="RenderHDRSkySunlightScale" control_name="RenderHDRSkySunlightScale" 
+   <layout_stack name="outer_stack" width="376" height="920" follows="all" animate="false" top="0" orientation="vertical">
+      <layout_panel name="env_controls" border="false" bevel_style="in" height="910" visible="true">
+
+         <layout_stack name="settings_stack" width="370" height="900" follows="all" animate="false" orientation="horizontal">
+
+            <layout_panel border="false" name="lp_sun_moon_atmos" bevel_style="none" auto_resize="false" user_resize="false" height="850" width="164">
+               <tab_container follows="top|left" halign="center" name="tabs" layout="topleft" height="260" width="154" top="6" left="4" tab_group="0" tab_width="44" tab_position="top">
+                  <panel       follows="top|left" height="180" width="152" layout="topleft" border="false" name="sun_panel" bevel_style="in" auto_resize="false" user_resize="false" visible="true" font="SansSerifBold" label="Sun">
+                     <sun_moon_trackball follows="top|left" height="146" width="146" top="0" left="4" thumb_mode="sun" name="sun_rotation"/>
+                     <color_swatch follows="top|left" height="20" width="156" layout="topleft" left="4" top_pad="8" label_height="0" name="sun_color" can_apply_immediately="true"/>
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="5" width="100" name="sun_elevation_label">Elevation</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="-90" max_val="90" name="sun_elevation"  can_edit_text="true" />
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="0" width="100" name="sun_azimuth_label">Azimuth</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="0"  max_val="359" name="sun_azimuth"    can_edit_text="true" />
+                  </panel>
+                  <panel       follows="top|left" height="180" width="152" layout="topleft" border="false" name="moon_panel" bevel_style="in" auto_resize="false" user_resize="false" visible="true" font="SansSerifBold" label="Moon">
+                     <sun_moon_trackball follows="top|left" height="146" width="146" top="0" left="4" thumb_mode="moon" name="moon_rotation"/>
+                     <color_swatch follows="top|left" height="20" width="156" layout="topleft" left="4" top_pad="8" label_height="0" name="moon_color" can_apply_immediately="true"/>
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="5" width="100" name="moon_elevation_label">Elevation</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="-90" max_val="90" name="moon_elevation" can_edit_text="true" />
+                     <text     follows="top|left" height="10" layout="topleft" top_pad="0" width="100" name="moon_azimuth_label">Azimuth</text>
+                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="0"  max_val="359" name="moon_azimuth"   can_edit_text="true" />
+                  </panel>
+               </tab_container>
+
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="6" left="10" name="haze_density_label">Intensity</text>
+               <slider follows="top|left" height="16" width="150" layout="topleft" top_pad="0" left="8"  decimal_digits="1" min_val="0"   max_val="50"  increment="0.1"  can_edit_text="true" name="RenderHDRSkySunlightScale" control_name="RenderHDRSkySunlightScale" 
                        tool_tip="Sunlight Brightness. Recommended: set the 'Sun' color swatch Luminance = 50."/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="ambient_scale_label">Ambient scale:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="-10" max_val="40"  increment="0.1"  can_edit_text="true" name="RenderSkyAmbientScale" control_name="RenderSkyAmbientScale"
-                       tool_tip="Changes to Ambient Brightness may take multiple seconds to recompute global illumination - have patience. Recommended: set the 'Ambient' color swatch Luminance = 50."/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_density_label">Haze Density:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="5"   increment="0.1"  can_edit_text="true" name="haze_density" 
-                       tool_tip=""/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="18" name="haze_horizon_label">Haze Horizon:</text>
-               <slider follows="top|left" height="16" width="170" layout="topleft" top_pad="2" left="18" decimal_digits="1" min_val="0.1" max_val="5"   increment="0.1"  can_edit_text="true" name="haze_horizon" 
-                       tool_tip="Haze Density must be > 0 for this to work."/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="18"  name="exposure_label">Exposure:</text>
-               <slider follows="top|left" height="16" width="170" layout="topleft" top_pad="2" left="18"  decimal_digits="1" min_val="0.2" max_val="4.0" increment="0.1"  can_edit_text="true" name="RenderExposure" control_name="RenderExposure" 
-                       tool_tip="Overall Brightness. If this control has no effect, enable 'Render HDR and Emissive' on Preferences/Graphics/Rendering and ensure Haze is > 0."/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_focus_label">Sun Glow Focus:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="-2" max_val="2.00" increment="0.01" can_edit_text="true" name="glow_focus" 
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="6" left="10"  name="haze_focus_label">Glow focus</text>
+               <slider follows="top|left" height="16" width="150" layout="topleft" top_pad="0" left="8"  decimal_digits="2" min_val="-2" max_val="2.00" increment="0.01" can_edit_text="true" name="glow_focus" 
                        tool_tip="When > 0, Sun Glow appears in haze or clouds.  For interesting effects, try &lt; 0."/>
-               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="8"  name="haze_size_label">Sun Glow Intensity:</text>
-               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="0"  max_val="1.99" increment="0.01" can_edit_text="true" name="glow_size" 
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="6" left="10" name="haze_size_label">Glow intensity</text>
+               <slider follows="top|left" height="16" width="150" layout="topleft" top_pad="0" left="8"  decimal_digits="2" min_val="0"  max_val="1.99" increment="0.01" can_edit_text="true" name="glow_size" 
                        tool_tip="Sun Glow Focus must not be 0 for this to have a visible effect."/>
 <!-- KS: code from panel_settings_sky_atmos.xml.  Hidden pending binding to pipeline.
-               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="density_multiplier_label">Density Multiplier:</text>
-               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="4" min_val="0.0001" max_val="2" increment="0.0001" can_edit_text="true" name="density_multiplier" control_name="density_multiplier"
+               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="6" left="10" name="density_multiplier_label">Density Multiplier</text>
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="0" left="8"  decimal_digits="4" min_val="0.0001" max_val="2" increment="0.0001" can_edit_text="true" name="density_multiplier" control_name="density_multiplier"
                        tool_tip="Fog/haze/glow density."/>
-               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="distance_multiplier_label">Distance Multiplier:</text>
-               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="2" min_val="0.05" max_val="1000" increment="0.01" can_edit_text="true" name="distance_multiplier" control_name="distance_multiplier"
+               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="6" left="10" name="distance_multiplier_label">Distance Multiplier</text>
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="0" left="8"  decimal_digits="2" min_val="0.05" max_val="1000" increment="0.01" can_edit_text="true" name="distance_multiplier" control_name="distance_multiplier"
                        initial_value="0.8" tool_tip="Fog/haze/glow multiplier for distance."/>
-               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="5" left="8"  name="maximum_altitude_label">Maximum Altitude:</text>
-               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0" max_val="10000"  increment="0.1"   can_edit_text="true" name="max_alt" 
+               <text   follows="left|top" height="10" width="160" layout="topleft" top_pad="6" left="10" name="maximum_altitude_label">Maximum Altitude</text>
+               <slider follows="left|top" height="16" width="170" layout="topleft" top_pad="0" left="8"  decimal_digits="1" min_val="0" max_val="10000"  increment="0.1"   can_edit_text="true" name="max_alt" 
                        tool_tip="fog/haze/glow maximum altitude."/>
 -->
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="UseSSAO" label="Ambient Occlusion" control_name="RenderDeferredSSAO">
+
+
+               <panel name="P_Ambient_Settings" follows="top|left" layout="topleft" top_pad="28" left="4" width="162" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+                      <text name="T_Ambient_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="100">Ambient</text>
+               </panel>
+               <color_swatch   follows="top|left" height="20" width="156" layout="topleft" left="4" top_pad="4" label_height="0" name="ambient_light" can_apply_immediately="true" />
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="6" left="10" name="ambient_scale_label">Intensity</text>
+               <slider follows="top|left" height="16" width="150" layout="topleft" top_pad="2" left="8" decimal_digits="1" min_val="-10" max_val="40"  increment="0.1"  can_edit_text="true" name="RenderSkyAmbientScale" control_name="RenderSkyAmbientScale"
+                       tool_tip="Changes to Ambient Brightness may take multiple seconds to recompute global illumination - have patience. Recommended: set the 'Ambient' color swatch Luminance = 50."/>
+
+               <panel name="P_Ambient_Settings" follows="top|left" layout="topleft" top_pad="28" left="4" width="162" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+                      <text name="T_Ambient_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="100">Atmosphere</text>
+               </panel>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="6" left="10" name="ambient_scale_label">Sky</text>
+               <color_swatch   follows="top|left" height="20" width="156" layout="topleft" left="4" top_pad="4" label_height="0" name="blue_horizon" can_apply_immediately="true" tool_tip="Was 'Blue Horizon'"/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="6" left="10"  name="haze_color_attributes_label">Haze</text>
+               <color_swatch   follows="top|left" height="20" width="156" layout="topleft" left="4" top_pad="4" label_height="0" name="blue_density" can_apply_immediately="true" tool_tip="Was 'Blue Density'"/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="2" left="10" name="haze_density_label">Density</text>
+               <slider follows="top|left" height="16" width="150" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0"   max_val="5"   increment="0.1"  can_edit_text="true" name="haze_density" 
+                       tool_tip=""/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="2" left="10" name="haze_horizon_label">Altitude</text>
+               <slider follows="top|left" height="16" width="150" layout="topleft" top_pad="2" left="8"  decimal_digits="1" min_val="0.1" max_val="5"   increment="0.1"  can_edit_text="true" name="haze_horizon" 
+                       tool_tip="Haze Density must be > 0 for this to work."/>
+
+               <panel name="P_Ambient_Settings" follows="top|left" layout="topleft" top_pad="28" left="4" width="162" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+                      <text name="T_Ambient_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="100">Clouds</text>
+               </panel>
+               <color_swatch   follows="top|left" height="20" width="156" layout="topleft" left="4" top_pad="4" label_height="0" name="cloud_color"   can_apply_immediately="true" />
+               <text   follows="left|top" height="10" width="100" layout="topleft" left="10" top_pad="4" name="cloud_coverage_label">Coverage</text>
+               <slider follows="left|top" height="16" width="150" layout="topleft" left="8"  top_pad="0" decimal_digits="2" increment="0.01" initial_value="0" min_val="0" max_val="1" can_edit_text="true" name="cloud_coverage"/>
+               <text   follows="left|top" height="10" width="100" layout="topleft" left="10" top_pad="2" name="cloud_scale_label">Scale</text>
+               <slider follows="left|top" height="16" width="150" layout="topleft" left="8"  top_pad="0" decimal_digits="2" increment="0.01" initial_value="0" min_val="0.01" max_val="3" can_edit_text="true" name="cloud_scale" />
+
+               <texture_picker follows="top|left" height="60" width="156" layout="topleft" top_pad="8" label_height="10" left="4" label="Cloud Image"  name="cloud_map"/>
+
+               <button         follows="top|left" height="26" width="108" layout="topleft" top_pad="20"                  left="30" label="Reset"        name="btn_reset" tool_tip="Close and reset to Shared Environment"/>
+            </layout_panel>
+
+            <layout_panel top="100" border="false" name="lp_2" bevel_style="in" auto_resize="false" user_resize="false" visible="true" width="200" height="950">
+
+               <panel name="T_Glow_Settings" follows="top|left" layout="topleft" top_pad="8" left="8" width="194" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+                       <text name="T_Glow_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="190">Lights</text>
+               </panel>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="12" left="16" name="reflection_probe_ambiance_label">Reflection Probe Ambiance</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="0" left="8"  decimal_digits="1" min_val="0"   max_val="10"  increment="0.1"  can_edit_text="true" name="probe_ambiance" 
+                       tool_tip="Intensity of global illumination as seen by the active ambient probe. At zero, HDR is turned off and 'HDR scale' becomes 'Brightness'. Values between 0 and 1 mix Environment and HDR ambiences. Above 1 is entirely HDR."/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="16"  name="scene_gamma_label">Brightness</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="0" left="8"  decimal_digits="1" min_val="0"   max_val="20"  increment="0.1"  can_edit_text="true" name="scene_gamma"
+                       tool_tip=""/>
+               <text   follows="top|left" height="10" width="180" layout="topleft" top_pad="5" left="16"  name="exposure_label">Exposure</text>
+               <slider follows="top|left" height="16" width="180" layout="topleft" top_pad="0" left="8"  decimal_digits="1" min_val="0.2" max_val="4.0" increment="0.1"  can_edit_text="true" name="RenderExposure" control_name="RenderExposure" 
+                       tool_tip="Overall Brightness. If this control has no effect, enable 'Render HDR and Emissive' on Preferences/Graphics/Rendering and ensure Haze is > 0."/>
+
+            <text follows="left|top" name="max_lights_label" height="10" layout="topleft" left="16" top_pad="18" width="175">Max local lights</text>
+            <slider follows="left|top" height="16" increment="1" layout="topleft" left="8" decimal_digits="0" min_val="0" max_val="512" name="local_light_count" control_name="RenderLocalLightCount" top_pad="0" width="180" can_edit_text="true" 
+                    tool_tip="The maximum number of local lights (object and attached) to render."/>
+            <check_box follows="top|left" layout="topleft" left="8" top_pad="8" height="16" label="Enable attached (face)lights" 
+                    tool_tip="Useful for turning off facelights when necessary." name="Render Attached Lights">
+               <check_box.on_check function="CheckControl" parameter="RenderAttachedLights" />
+               <check_box.check_button.commit_callback function="Advanced.HandleAttachedLightParticles" parameter="RenderAttachedLights" />
+            </check_box>
+
+
+            <check_box control_name="RenderGlow" height="16" label="Enable Object Glow" layout="topleft" left="8" name="RenderGlow" top_pad="10" width="256" 
+                        tool_tip="Materials with glow set will glow. Note that strength needs to be set to zero to disable glow when shadows are enabled."/>
+
+            <text name="T_Glow_Res" follows="top|left" layout="topleft" left="16" top_pad="8" width="80">Quality</text>
+            <slider_bar name="SB_Glow_Res" control_name="RenderGlowResolutionPow" enabled_control="RenderGlow" follows="top|left" height="10" increment="1" layout="topleft" left_pad="-90" min_val="8" max_val="10" top_delta="14" width="110" 
+                        tool_tip="Glow resolution. Higher is smoother but slower." />
+            <spinner name="S_Glow_Res" control_name="RenderGlowResolutionPow" enabled_control="RenderGlow" top_delta="-12" label_width="0" left_pad="3" increment="1" decimal_digits="0" follows="top|left" max_val="10" min_val="8" width="53" 
+                        tool_tip="Glow resolution. Higher is smoother but slower." />
+            <button follows="left|top" name="Reset_RenderGlowResolutionPow" height="20" label="D" layout="topleft" left_pad="0" top_delta="1" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowResolutionPow" /></button>
+
+            <text name="T_Glow_Iterations" follows="top|left" layout="topleft" left="16" top_pad="2" width="80">Iterations</text>
+            <slider_bar name="SB_Glow_Iterations" control_name="RenderGlowIterations" enabled_control="RenderGlow" follows="top|left" height="10" increment="1" layout="topleft" left_pad="-90" min_val="1" max_val="20" top_delta="14" width="110" 
+                        tool_tip="Number of times to expand the glow Higher is wider and smoother but slower)." />
+            <spinner name="S_Glow_Iterations" control_name="RenderGlowIterations" enabled_control="RenderGlow" top_delta="-12" label_width="0" left_pad="3" increment="1" decimal_digits="1" follows="top|left" max_val="20" min_val="1" width="53"
+                        tool_tip="Number of times to expand the glow Higher is wider and smoother but slower)." />
+            <button follows="left|top" name="Reset_Glow_Iterations" height="20" label="D" layout="topleft" left_pad="0" top_delta="1" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowIterations" /></button>
+
+            <text name="T_Glow_Strength" follows="top|left" layout="topleft" left="16" top_pad="2" width="80">Strength</text>
+            <slider_bar name="SB_Glow_Strength" control_name="RenderGlowStrength" enabled_control="RenderGlow" follows="top|left" height="10" increment=".01" layout="topleft" left_pad="-90" min_val="0" max_val="2" top_delta="14" width="110" 
+                        tool_tip="Additive strength of glow, effective values begin very low.  The spinner offers finer resolution." />
+            <spinner name="S_Glow_Strength" control_name="RenderGlowStrength"     enabled_control="RenderGlow" follows="top|left" top_delta="-12" increment=".001" label_width="0" left_pad="3" decimal_digits="3" min_val="0" max_val="2" width="53" 
+                        tool_tip="Additive strength of glow, effective values begin very low.  The spinner offers finer resolution." />
+            <button follows="left|top" name="Reset_Glow_Strength" height="20" label="D" layout="topleft" left_pad="0" top_delta="1" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowStrength" /></button>
+
+            <text name="T_Glow_Width" follows="top|left" layout="topleft" left="16" top_pad="2" width="80">Width</text>
+            <slider_bar name="SB_Glow_Width" control_name="RenderGlowWidth" enabled_control="RenderGlow" follows="top|left" height="10" increment="0.1" layout="topleft" left_pad="-90" min_val="0.1" max_val="5" top_delta="14" width="110" 
+                        tool_tip="Glow sample size. Higher = wider and softer glow, but eventually it will become more pixelated." />
+            <spinner name="S_Glow_Width" control_name="RenderGlowWidth" enabled_control="RenderGlow" top_delta="-12" label_width="0" left_pad="3" increment="0.1" decimal_digits="1" follows="top|left" max_val="5000" min_val="0" width="53" 
+                        tool_tip="Glow sample size. Higher = wider and softer glow, but eventually it will become more pixelated." />
+            <button follows="left|top" name="Reset_Glow_Width" height="20" label="D" layout="topleft" left_pad="0" top_delta="1" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderGlowWidth" /></button>
+
+
+            <panel name="P_Shadow_Settings" follows="top|left" layout="topleft" top_pad="22" left="8" width="194" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+                        <text name="T_Shadow_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" height="17" width="190">Shadows</text>
+            </panel>
+
+            <text name="T_Shadow_Types" follows="left|top" height="16" left="16" top_pad="10" width="48" layout="topleft">Render</text>
+            <combo_box control_name="RenderShadowDetail" enabled_control="RenderDeferred" follows="top|left" height="20" layout="topleft" left_pad="0" name="ShadowDetail" width="130" 
+                        tool_tip="Regardless of the setting you choose here, textures projected from projection lights will still be enabled.">
+               <combo_box.item label="None" name="0" value="0" /> <combo_box.item label="Sun/Moon" name="1" value="1" /> <combo_box.item label="Sun/Moon + Projectors" name="2" value="2" /> </combo_box>
+
+            <text name="T_Shadow_Res" follows="top|left" layout="topleft" left="16" top_pad="8" width="80">Resolution</text>
+            <slider_bar name="SB_Shadow_Res" control_name="RenderShadowResolutionScale" follows="top|left" height="16" increment="1" layout="topleft" left="8" min_val="1" max_val="4" top_delta="12" width="110" 
+                        tool_tip="Determines shadow quality. Impacts performance - it is a good idea to leave this setting LOW when you are not shooting. When you want to take a photo, raise the slider, watching framerate."/>
+            <spinner name="S_Shadow_Res" control_name="RenderShadowResolutionScale" top_delta="-3" label_width="0" left_pad="3" decimal_digits="1" follows="top|left" max_val="5" min_val="0.1" width="50" increment="0.1" 
+                        tool_tip="Determines shadow quality. Impacts performance - it is a good idea to leave this setting LOW when you are not shooting. When you want to take a photo, raise the slider, watching framerate."/>
+            <button follows="left|top" name="Reset_Shadow_Res" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderShadowResolutionScale" /> </button>
+
+            <text name="T_Shd_Bias" follows="top|left" layout="topleft" left="16" top_pad="0" width="100">Attachment Bias</text>
+            <slider_bar name="SB_Shd_Bias" control_name="RenderShadowBias" follows="top|left" height="16" increment="0.001" layout="topleft" left="8" min_val="-0.008" max_val="0.003" top_delta="12" width="110" 
+                        tool_tip="Positions of shadows relative to casting objects. Usually 0. Small tweaks can fix gaps."/>
+            <spinner name="S_Shd_Bias" control_name="RenderShadowBias" top_delta="-3" label_width="0" left_pad="-2" decimal_digits="4" follows="top|right" max_val=".005" min_val="-0.01" width="60" increment="0.001" 
+                        tool_tip="Positions of shadows relative to casting objects. Usually 0. Small tweaks can fix gaps."/>
+            <button follows="left|top" name="Shd_Bias_Reset" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderShadowBias" /> </button>
+
+               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="10" name="UseSSAO" label="Render Ambient Occlusion" control_name="RenderDeferredSSAO">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+
+<!--
                <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="ScreenSpaceReflections" label="Screen Space Reflections" control_name="RenderScreenSpaceReflections">
-                          <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="8"  top_pad="18" name="DepthOfField" label="Depth Of Field" control_name="RenderDepthOfField">
-                          <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
-               <text      follows="top|left" height="10" width="180" layout="topleft" left="28" top_pad="2"  name="f_stop_label" >F/Stop:</text>
-               <slider    follows="top|left" height="16" width="170" layout="topleft" left="20" top_pad="2"  decimal_digits="0" min_val="2" max_val="32"  increment="1" can_edit_text="true" name="f_stop" control_name="CameraFNumber" 
-                          tool_tip="Sets 'distance between the nearest and farthest objects in a scene that appear acceptably sharp in an image' (Wikipedia). The blur rendered for shallow DOF can substantially reduce your frame rate." />
-               <check_box follows="top|left" height="16" width="185" layout="topleft" left="26" top_pad="2"  name="FocusFollowsPointer" label="Focus@Pointer" control_name="FSFocusPointFollowsPointer">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
                <text      follows="top|left" height="10" width="180" layout="topleft" left="10" top_pad="18" name="max_lights_label">Max local lights:</text>
                <slider    follows="top|left" height="16" width="180" layout="topleft" left="12" top_pad="2"  decimal_digits="0" min_val="0" max_val="512" increment="1" can_edit_text="true" name="local_light_count" control_name="RenderLocalLightCount" 
                           tool_tip="Up to this number of lights, including worn lights, nearest to the camera will be lit."/>
                <check_box follows="top|left" height="16" width="185" layout="topleft" left="20"              name="AttachedLights" label="Render Attached Lights" control_name="RenderAttachedLights">
                           <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
-               <text      follows="top|left" height="10" width="180" layout="topleft" left="28" top_pad="24" name="camera_roll_hint"
+-->
+
+            <text name="T_Blur_Size" follows="top|left" layout="topleft" left="18" top_pad="2" width="80">Shadow blur</text>
+            <slider_bar name="SB_Blur_Size" control_name="RenderShadowBlurSize" enabled_control="RenderDeferredSSAO" follows="top|left" height="16" increment="0.1" layout="topleft" left="12" min_val="1" max_val="10" top_delta="12" width="110" 
+                        tool_tip="Set to '0' for the sharpest shadows possible; increase to soften shadow edges. This setting is directly related to the one below it as well. If set to 4.00, you can use Shadows Soften to adjust the shadow blur independent of the ambient occlusion."/>
+            <spinner name="S_Blur_Size" control_name="RenderShadowBlurSize" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="1" follows="top|left" max_val="100" min_val="0" width="53" increment="0.1" 
+                        tool_tip="Controls softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Blur' value above. Then the slider here to soften the AO to your liking. This has no effect on shadows caused by projector lights."/>
+            <button follows="left|top" name="Blur_Reset" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderShadowBlurSize" /></button>
+
+<!-- NEEDS CODE SUPPORT -->
+            <!-- RenderShadowGaussian X component -->
+            <text name="T_Shd_Soften" follows="top|left" layout="topleft" left="18" top_pad="0" width="90">Shadow softness</text>
+            <slider_bar name="SB_Shd_Soften" enabled_control="RenderDeferredSSAO" follows="top|left" height="16" increment="0.001" layout="topleft" left="12" min_val="0.001" max_val="3" top_delta="12" width="110" 
+                        tool_tip="Controls softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Blur' value above. Then the slider here to soften the AO to your liking. This has no effect on shadows caused by projector lights."/>
+            <spinner name="S_Shd_Soften" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" increment=".001" decimal_digits="3" follows="top|right" max_val="10" min_val="-1" width="53"
+                        tool_tip="Controls softening effect of Sun/Moon shadows. One simple way to set this value for your specific needs is to first set the 'Blur' value above. Then the slider here to soften the AO to your liking. This has no effect on shadows caused by projector lights."/>
+            <button follows="left|top" name="Shd_Soften_Reset" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value." />
+
+            <text name="T_Scale" follows="top|left" layout="topleft" left="18" top_pad="0" width="80">AO Scale</text>
+            <slider_bar name="SB_Scale" control_name="RenderSSAOScale" enabled_control="RenderDeferredSSAO" follows="top|left" height="16" increment="10" layout="topleft" left="12" min_val="0" max_val="10000" top_delta="12" width="110"
+                        tool_tip="Controls sampling region; larger regions are more accurate. The spinner offers finer control over a larger range." />
+            <spinner name="S_Scale" control_name="RenderSSAOScale" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="0" follows="top|right" max_val="100000" min_val="-100" width="53" increment="1"
+                        tool_tip="Controls sampling region; larger regions are more accurate. The spinner offers finer control over a larger range." />
+            <button follows="left|top" name="Reset_Scale" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderSSAOScale" /></button>
+
+            <text name="T_Max_Scale" follows="top|left" layout="topleft" left="18" top_pad="0" width="80">AO Radius</text>
+            <slider_bar name="SB_Max_Scale" control_name="RenderSSAOMaxScale" enabled_control="RenderDeferredSSAO" follows="top|left" height="16" increment="1" layout="topleft" left="12" min_val="0" max_val="1024" top_delta="12" width="110"
+                        tool_tip="Controls maximum screen radius to sample from, to avoid graphics card cache misses and associated large performance penalty." />
+            <spinner name="S_Max_Scale" control_name="RenderSSAOMaxScale" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="0" follows="top|right" max_val="100000" min_val="0" width="53" increment="1" 
+                        tool_tip="Controls maximum screen radius to sample from, to avoid graphics card cache misses and associated large performance penalty."/>
+            <button follows="left|top" name="Reset_Max_Scale" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."><button.commit_callback function="ResetControl" parameter="RenderSSAOMaxScale" /> </button>
+
+<!-- RenderSSAOEffect X component (needed in llfloaterpreferencesgraphicsadvanced.cpp)
+
+quickprefs.cpp:        gSavedSettings.getControl("RenderSSAOEffect")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+quickprefs.cpp:        getChild<LLSlider>("SB_Effect")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeRenderSSAOEffectSlider, this));
+quickprefs.cpp:        getChild<LLSpinCtrl>("S_Effect")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeRenderSSAOEffectSpinner, this));
+quickprefs.cpp:        getChild<LLButton>("Reset_Effect")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetRenderSSAOEffectX, this));
+quickprefs.cpp:        mSliderRenderSSAOEffectX = getChild<LLSlider>("SB_Effect");
+quickprefs.cpp:        mSpinnerRenderSSAOEffectX = getChild<LLSpinCtrl>("S_Effect");
+quickprefs.cpp:        LLVector3 renderSSAOEffect = gSavedSettings.getVector3("RenderSSAOEffect");
+quickprefs.cpp:        mSpinnerRenderSSAOEffectX->setValue(renderSSAOEffect.mV[VX]);
+quickprefs.cpp:        mSliderRenderSSAOEffectX->setValue(renderSSAOEffect.mV[VX]);
+quickprefs.cpp:void FloaterQuickPrefs::onChangeRenderSSAOEffectSlider()
+quickprefs.cpp:    LLVector3 renderSSAOEffect = gSavedSettings.getVector3("RenderSSAOEffect");
+quickprefs.cpp:    renderSSAOEffect.mV[VX] = mSliderRenderSSAOEffectX->getValueF32();
+quickprefs.cpp:    mSpinnerRenderSSAOEffectX->setValue(renderSSAOEffect.mV[VX]);
+quickprefs.cpp:    gSavedSettings.setVector3("RenderSSAOEffect", renderSSAOEffect);
+quickprefs.cpp:void FloaterQuickPrefs::onChangeRenderSSAOEffectSpinner()
+quickprefs.cpp:    LLVector3 renderSSAOEffect = gSavedSettings.getVector3("RenderSSAOEffect");
+quickprefs.cpp:    renderSSAOEffect.mV[VX] = mSpinnerRenderSSAOEffectX->getValueF32();
+quickprefs.cpp:    mSliderRenderSSAOEffectX->setValue(renderSSAOEffect.mV[VX]);
+quickprefs.cpp:    gSavedSettings.setVector3("RenderSSAOEffect", renderSSAOEffect);
+quickprefs.cpp:void FloaterQuickPrefs::onClickResetRenderSSAOEffectX()
+quickprefs.cpp:    LLVector3 renderSSAOEffectDefault = LLVector3(gSavedSettings.getControl("RenderSSAOEffect")->getDefault());
+quickprefs.cpp:    LLVector3 renderSSAOEffect = gSavedSettings.getVector3("RenderSSAOEffect");
+quickprefs.cpp:    mSpinnerRenderSSAOEffectX->setValue(renderSSAOEffect.mV[VX]);
+quickprefs.cpp:    mSliderRenderSSAOEffectX->setValue(renderSSAOEffect.mV[VX]);
+quickprefs.cpp:    gSavedSettings.setVector3("RenderSSAOEffect", renderSSAOEffect);
+-->
+
+<!-- NEEDS CODE SUPPORT? -->
+            <text name="T_Effect" follows="top|left" layout="topleft" left="18" top_pad="0" width="80">AO Luminance</text> 
+            <slider_bar name="SB_Effect" control_name="RenderSSAOEffect" enabled_control="RenderDeferredSSAO" follows="top|left" height="16" increment="0.01" layout="topleft" left="12" min_val="-10" max_val="10" top_delta="12" width="110" 
+                        tool_tip="Controls the overall light occlusion.  Values of 0.0 and below provide more realistic results. Note: The spinner offers a larger range than the slider." />
+            <spinner name="S_Effect" control_name="RenderSSAOEffect" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="2" follows="top|right" max_val="1000" min_val="-100" width="53" increment=".01"
+                        tool_tip="Controls the overall light occlusion.  Values of 0.0 and below provide more realistic results. Note: The spinner offers a larger range than the slider." />
+            <button follows="left|top" name="Reset_Effect" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value." />
+
+            <text name="T_Scaling_Factor" follows="top|left" layout="topleft" left="18" top_pad="0" width="80">AO Multiplier</text>
+            <slider_bar name="SB_Scaling_Factor" control_name="RenderSSAOFactor" enabled_control="RenderDeferredSSAO" follows="top|left" height="16" increment="0.01" layout="topleft" left="12" min_val="0" max_val="100" top_delta="12" width="110" 
+                        tool_tip="Scaling factor for the effect (larger is wider)." />
+            <spinner name="S_Scaling_Factor" control_name="RenderSSAOFactor" enabled_control="RenderDeferredSSAO" top_delta="-3" label_width="0" left_pad="0" decimal_digits="1" follows="top|right" max_val="00" min_val="0" width="53" increment="0.1"
+                        tool_tip="Scaling factor for the effect (larger is wider)." />
+            <button follows="left|top" name="Reset_Scaling_Factor" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" 
+                        tool_tip="Reset to the default value."> <button.commit_callback function="ResetControl" parameter="RenderSSAOFactor"/> </button>
+
+<!--
+   <text name="T_I_Max" follows="top|left" layout="topleft" left="5" top_pad="5" tool_tip="Sets the maximum brightness limit for irradiance in Ambient Occlusion calculations. Acts as an upper cap to prevent overly bright areas from dominating the AO effect." width="70">Irrad. Max</text>
+   <slider_bar name="SB_I_Max" can_edit_text="true" control_name="RenderSSAOIrradianceMax" follows="left|right" height="16" increment="1" decimal_digits="0" layout="topleft" left_pad="0" min_val="0" max_val="10000" top_delta="-2" width="127" />
+   <spinner name="S_I_Max" can_edit_text="true" control_name="RenderSSAOIrradianceMax" top_delta="-3" label_width="0" left_pad="0" decimal_digits="0" follows="top|right" max_val="10000000" min_val="0" width="53" increment="1" border_visible="false" />
+   <button follows="left|top" name="Reset_I_Max" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" tool_tip="Reset to the default value.">
+      <button.commit_callback function="ResetControl" parameter="RenderSSAOIrradianceMax" />
+   </button>
+   <text name="T_I_Scaling" follows="top|left" layout="topleft" left="5" top_pad="5" tool_tip="Controls the scaling of light irradiance within Ambient Occlusion, affecting how light intensity influences shadow darkness. Adjust for balanced lighting in bright scenes. " width="70">Irrad. Scale</text>
+   <slider_bar name="SB_I_Scaling" decimal_digits="2" can_edit_text="true" control_name="RenderSSAOIrradianceScale" follows="left|right" height="16" increment="1" layout="topleft" left_pad="0" min_val="0" max_val="100" top_delta="-2" width="127" />
+   <spinner name="S_I_Scaling" can_edit_text="true" control_name="RenderSSAOIrradianceScale" top_delta="-3" label_width="0" left_pad="0" decimal_digits="1" follows="top|right" max_val="100000" min_val="0" width="53" increment="0.5" border_visible="false" />
+   <button follows="left|top" name="Reset_I_Scaling" height="22" label="D" layout="topleft" left_pad="0" top_delta="0" width="20" tool_tip="Reset to the default value.">
+      <button.commit_callback function="ResetControl" parameter="RenderSSAOIrradianceScale" />
+   </button>
+-->
+
+      <panel name="PT_Reflections" follows="top|left" layout="topleft" top_pad="18" left="8" width="194" height="22" bg_alpha_color="Phototools_Header" border_visible="true" border_thickness="1" background_visible="true">
+            <text name="T_Reflections_Settings" follows="left|top" layout="topleft" left="10" font="SansSerif" width="230">Reflections</text>
+            </panel>
+      <panel name="P_Reflections" follows="top|left" layout="topleft" top_pad="0" left="5" width="190" height="120" border_visible="false" background_visible="true">
+            <check_box control_name="RenderScreenSpaceReflections" height="16" initial_value="true" label="Screen Space" name="ScreenSpaceReflections" layout="topleft" left="8" top_pad="10" width="40"
+                  tool_tip="Toggling requires a re-render of the global illumination, which may take seconds.">
+                  <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="ReflectionProbeText" text_readonly_color="LabelDisabledColor" width="80">Coverage:</text>
+            <combo_box control_name="RenderReflectionProbeLevel" height="16" layout="topleft" left="104" top_delta="0" name="ReflectionLevel" width="80" enabled_control="RenderScreenSpaceReflections">
+                  <combo_box.item label="None" name="0" value="0" /> <combo_box.item label="Manual only" name="1" value="1" /> <combo_box.item label="Manual + terrain" name="2" value="2" /> <combo_box.item label="Full scene" name="3" value="3" /> </combo_box>
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="ReflectionDetailText" text_readonly_color="LabelDisabledColor" width="80">Update Rate:</text>
+            <combo_box control_name="RenderReflectionProbeDetail" height="16" layout="topleft" left="104" top_delta="0" name="ReflectionDetail" width="80" enabled_control="RenderScreenSpaceReflections" >
+                  <combo_box.item label="Static Only" name="0" value="0" /> <combo_box.item label="Static+Dynamic" name="1" value="1" /> <combo_box.item label="Realtime" name="2" value="2" /> </combo_box>
+
+            <check_box control_name="RenderMirrors" height="16" initial_value="false" label="Mirrors" layout="topleft" left="8" name="Mirrors" top_delta="24" width="240"
+                  tool_tip="Toggling requires a re-render of the global illumination, which may take seconds.">
+                  <check_box.commit_callback function="Pref.RenderOptionUpdate" /> </check_box>
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="MirrorResolutionText" text_readonly_color="LabelDisabledColor" width="68">Resolution:</text>
+            <combo_box control_name="RenderHeroProbeResolution" height="16" layout="topleft" left="104" top_delta="0" name="MirrorResolution" width="80" enabled_control="RenderMirrors">
+                  <combo_box.item label="256" name="0" value="256" /> <combo_box.item label="512" name="1" value="512" /> <combo_box.item label="1024" name="2" value="1024" /> <combo_box.item label="2048" name="3" value="2048" /> </combo_box>
+            <text type="string" length="1" follows="left|top" height="16" layout="topleft" left="25" name="HeroProbeUpdateText" text_readonly_color="LabelDisabledColor" width="68">Update Rate:</text>
+            <combo_box control_name="RenderHeroProbeUpdateRate" height="16" layout="topleft" left="104" top_delta="0" name="HeroProbeUpdateRate" width="80" enabled_control="RenderMirrors">
+                  <combo_box.item label="Low" name="6" value="6" /> <combo_box.item label="Medium" name="3" value="3" /> <combo_box.item label="High" name="1" value="2" /> <combo_box.item label="Ultra" name="0" value="1" /> </combo_box>
+      </panel>
+
+<!-- needed in llfloaterpreferencesgraphicsadvanced.cpp
+
+quickprefs.cpp:        gSavedSettings.getControl("FSRenderVignette")->getSignal()->connect(boost::bind(&FloaterQuickPrefs::refreshSettings, this));
+quickprefs.cpp:        // Vignette UI controls
+quickprefs.cpp:        getChild<LLSpinCtrl>("VignetteSpinnerX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerX, this));
+quickprefs.cpp:        getChild<LLSlider>("VignetteSliderX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteX, this));
+quickprefs.cpp:        getChild<LLButton>("Reset_VignetteX")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteX, this));
+quickprefs.cpp:        getChild<LLSpinCtrl>("VignetteSpinnerY")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerY, this));
+quickprefs.cpp:        getChild<LLSlider>("VignetteSliderY")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteY, this));
+quickprefs.cpp:        getChild<LLButton>("Reset_VignetteY")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteY, this));
+quickprefs.cpp:        getChild<LLSpinCtrl>("VignetteSpinnerZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteSpinnerZ, this));
+quickprefs.cpp:        getChild<LLSlider>("VignetteSliderZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onChangeVignetteZ, this));
+quickprefs.cpp:        getChild<LLButton>("Reset_VignetteZ")->setCommitCallback(boost::bind(&FloaterQuickPrefs::onClickResetVignetteZ, this));
+quickprefs.cpp:        // Vignette UI controls
+quickprefs.cpp:        mSpinnerVignetteX = getChild<LLSpinCtrl>("VignetteSpinnerX");
+quickprefs.cpp:        mSpinnerVignetteY = getChild<LLSpinCtrl>("VignetteSpinnerY");
+quickprefs.cpp:        mSpinnerVignetteZ = getChild<LLSpinCtrl>("VignetteSpinnerZ");
+quickprefs.cpp:        mSliderVignetteX = getChild<LLSlider>("VignetteSliderX");
+quickprefs.cpp:        mSliderVignetteY = getChild<LLSlider>("VignetteSliderY");
+quickprefs.cpp:        mSliderVignetteZ = getChild<LLSlider>("VignetteSliderZ");
+quickprefs.cpp:    // <FS:CR> FIRE-9630 - Vignette UI controls
+quickprefs.cpp:        LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:        mSpinnerVignetteX->setValue(vignette.mV[VX]);
+quickprefs.cpp:        mSpinnerVignetteY->setValue(vignette.mV[VY]);
+quickprefs.cpp:        mSpinnerVignetteZ->setValue(vignette.mV[VZ]);
+quickprefs.cpp:        mSliderVignetteX->setValue(vignette.mV[VX]);
+quickprefs.cpp:        mSliderVignetteY->setValue(vignette.mV[VY]);
+quickprefs.cpp:        mSliderVignetteZ->setValue(vignette.mV[VZ]);
+quickprefs.cpp:// <FS:CR> FIRE-9630 - Vignette UI callbacks
+quickprefs.cpp:void FloaterQuickPrefs::onChangeVignetteX()
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    vignette.mV[VX] = mSliderVignetteX->getValueF32();
+quickprefs.cpp:    mSpinnerVignetteX->setValue(vignette.mV[VX]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onChangeVignetteY()
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    vignette.mV[VY] = mSliderVignetteY->getValueF32();
+quickprefs.cpp:    mSpinnerVignetteY->setValue(vignette.mV[VY]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onChangeVignetteZ()
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    vignette.mV[VZ] = mSliderVignetteZ->getValueF32();
+quickprefs.cpp:    mSpinnerVignetteZ->setValue(vignette.mV[VZ]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onChangeVignetteSpinnerX()
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    vignette.mV[VX] = mSpinnerVignetteX->getValueF32();
+quickprefs.cpp:    mSliderVignetteX->setValue(vignette.mV[VX]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onChangeVignetteSpinnerY()
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    vignette.mV[VY] = mSpinnerVignetteY->getValueF32();
+quickprefs.cpp:    mSliderVignetteY->setValue(vignette.mV[VY]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onChangeVignetteSpinnerZ()
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    vignette.mV[VZ] = mSpinnerVignetteZ->getValueF32();
+quickprefs.cpp:    mSliderVignetteZ->setValue(vignette.mV[VZ]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onClickResetVignetteX()
+quickprefs.cpp:    LLVector3 vignette_default = LLVector3(gSavedSettings.getControl("FSRenderVignette")->getDefault());
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    mSliderVignetteX->setValue(vignette.mV[VX]);
+quickprefs.cpp:    mSpinnerVignetteX->setValue(vignette.mV[VX]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onClickResetVignetteY()
+quickprefs.cpp:    LLVector3 vignette_default = LLVector3(gSavedSettings.getControl("FSRenderVignette")->getDefault());
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    mSliderVignetteY->setValue(vignette.mV[VY]);
+quickprefs.cpp:    mSpinnerVignetteY->setValue(vignette.mV[VY]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:void FloaterQuickPrefs::onClickResetVignetteZ()
+quickprefs.cpp:    LLVector3 vignette_default = LLVector3(gSavedSettings.getControl("FSRenderVignette")->getDefault());
+quickprefs.cpp:    LLVector3 vignette = gSavedSettings.getVector3("FSRenderVignette");
+quickprefs.cpp:    mSliderVignetteZ->setValue(vignette.mV[VZ]);
+quickprefs.cpp:    mSpinnerVignetteZ->setValue(vignette.mV[VZ]);
+quickprefs.cpp:    gSavedSettings.setVector3("FSRenderVignette", vignette);
+quickprefs.cpp:// </FS:CR> FIRE-9630 - Vignette UI callbacks
+
+-->
+
+               <text      follows="top|left" height="10" width="180" layout="topleft" left="28" top_pad="40" name="camera_roll_hint"
                           tool_tip="Or see Preferences/Controls/Camera: Roll Left and Roll Right.">ALT-Q  :Camera roll:  ALT-E</text>
             </layout_panel>
 
-            <layout_panel border="false" name="lp_sun_moon_atmos" bevel_style="none" auto_resize="false" user_resize="false" height="156" width="310">
-               <tab_container follows="top|left" halign="center" name="tabs" layout="topleft" height="240" width="154" top="6" left="4" tab_group="0" tab_width="44" tab_position="top">
-                  <panel       follows="top|left" height="150" width="152" layout="topleft" border="false" name="sun_panel" bevel_style="in" auto_resize="false" user_resize="false" visible="true" font="SansSerifBold" label="Sun">
-                     <sun_moon_trackball follows="top|left" height="146" width="146" top="0" left="4" thumb_mode="sun" name="sun_rotation"/>
-                     <text     follows="top|left" height="10" layout="topleft" top_pad="5" width="100" name="sun_elevation_label">Elevation:</text>
-                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="-90" max_val="90" name="sun_elevation"  can_edit_text="true" />
-                     <text     follows="top|left" height="10" layout="topleft" top_pad="0" width="100" name="sunn_azimuth_label">Azimuth:</text>
-                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="0"  max_val="359" name="sun_azimuth"    can_edit_text="true" />
-                  </panel>
-                  <panel       follows="top|left" height="150" width="152" layout="topleft" border="false" name="moon_panel" bevel_style="in" auto_resize="false" user_resize="false" visible="true" font="SansSerifBold" label="Moon">
-                     <sun_moon_trackball follows="top|left" height="146" width="146" top="0" left="4" thumb_mode="moon" name="moon_rotation"/>
-                     <text     follows="top|left" height="10" layout="topleft" top_pad="5" width="100" name="moon_elevation_label">Elevation:</text>
-                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="-90" max_val="90" name="moon_elevation" can_edit_text="true" />
-                     <text     follows="top|left" height="10" layout="topleft" top_pad="0" width="100" name="moon_azimuth_label">Azimuth:</text>
-                     <slider   follows="top|left" height="16" layout="topleft" top_pad="4" width="150" decimal_digits="0" increment="1" min_val="0"  max_val="359" name="moon_azimuth"   can_edit_text="true" />
-                  </panel>
-               </tab_container>
-               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="10" label_height="10" left="38" label="Sun Color"    name="sun_color"     can_apply_immediately="true"/>
-               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Ambient"      name="ambient_light" can_apply_immediately="true" />
-               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Blue Horizon" name="blue_horizon"  can_apply_immediately="true" />
-               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Blue Density" name="blue_density"  can_apply_immediately="true" />
-               <color_swatch   follows="top|left" height="30" width="80" layout="topleft" top_pad="12" label_height="10"           label="Cloud Color"  name="cloud_color"   can_apply_immediately="true" />
-               <texture_picker follows="top|left" height="60" width="80" layout="topleft" top_pad="12" label_height="10"           label="Cloud Image"  name="cloud_map"/>
-               <button         follows="top|left" height="23" width="98" layout="topleft" top_pad="10"                   left="30" label="Reset"        name="btn_reset" tool_tip="Close and reset to Shared Environment"/>
-            </layout_panel>
 
          </layout_stack>
       </layout_panel>
+
    </layout_stack>
 </floater>
+
